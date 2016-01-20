@@ -260,12 +260,26 @@ namespace AllegiantPDFMergerFinal
                 });
 
             if (await convertingTask) messeging.Messege = "Merging";
+            string resultMessage = "";
 
             Task<bool> mergingTask = convertingTask.ContinueWith((t) =>
                 {
                     //if (errorMsg != "") MessageBox.Show(errorMsg, "Just screenshot this error report, excution will continue as normal", MessageBoxButton.OK, MessageBoxImage.Warning);
                     if (pdfFiles.Count == 0) return true;
-                    return PDFFiles.Merge(pdfFiles, outFile);
+
+                    bool mergeSucceeded = false;
+                    
+
+                    try
+                    {
+                        mergeSucceeded = PDFFiles.Merge(pdfFiles, outFile);
+                    }
+                    catch (System.IO.FileLoadException ex)
+                    {
+                        resultMessage = ex.Message;
+                    }
+
+                    return mergeSucceeded;
                 });
 
             if (await mergingTask)
@@ -275,7 +289,8 @@ namespace AllegiantPDFMergerFinal
             }
             else
             {
-                messeging.Messege = "An error has occurred and cannot merge files";
+                if (resultMessage != "") messeging.Messege = resultMessage;
+                else messeging.Messege = "An error has occurred and cannot merge files";
             }
 
             return await mergingTask;

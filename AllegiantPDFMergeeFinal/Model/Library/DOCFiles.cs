@@ -34,7 +34,8 @@ namespace AllegiantPDFMerger
                 if (!Directory.GetParent(destinationFile).Exists) return null;
 
                 string filePath = this.filePath;
-                if (fileLocked()) return null; 
+                FileInfo file = new FileInfo(filePath);
+                if (this.IsFileLocked()) return null; 
 
                 //read doc
                 Word.Application wordApp = null;
@@ -73,46 +74,46 @@ namespace AllegiantPDFMerger
 
         }      
 
-        private bool fileLocked()
-        {
-            int elapseTime = 0;
-            int delay = 250; //wait 250 milliseconds each time
-            int timeout = 5; //5 seconds
-            FileInfo file = new FileInfo(this.filePath);
+        //private bool fileLocked()
+        //{
+        //    int elapseTime = 0;
+        //    int delay = 250; //wait 250 milliseconds each time
+        //    int timeout = 5; //5 seconds
+        //    FileInfo file = new FileInfo(this.filePath);
 
-            while (IsFileLocked(file) && elapseTime / 1000 < timeout)
-            {
-                System.Threading.Thread.Sleep(delay);
-                elapseTime += delay;
-            }
+        //    while (IsFileLocked(file) && elapseTime / 1000 < timeout)
+        //    {
+        //        System.Threading.Thread.Sleep(delay);
+        //        elapseTime += delay;
+        //    }
 
-            return IsFileLocked(file);
-        }
+        //    return IsFileLocked(file);
+        //}
 
-        protected virtual bool IsFileLocked(FileInfo file)
-        {
-            FileStream stream = null;
+        //protected virtual bool IsFileLocked(FileInfo file)
+        //{
+        //    FileStream stream = null;
 
-            try
-            {
-                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            }
-            catch (IOException)
-            {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
-                return true;
-            }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
+        //    try
+        //    {
+        //        stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        //    }
+        //    catch (IOException)
+        //    {
+        //        //the file is unavailable because it is:
+        //        //still being written to
+        //        //or being processed by another thread
+        //        //or does not exist (has already been processed)
+        //        return true;
+        //    }
+        //    finally
+        //    {
+        //        if (stream != null)
+        //            stream.Close();
+        //    }
 
-            //file is not locked
-            return false;
-        }
+        //    //file is not locked
+        //    return false;
+        //}
     }
 }

@@ -24,8 +24,24 @@ namespace AllegiantPDFMerger
         {
             try
             {
+
+                InFiles.ForEach(file =>
+                {
+                    PdfReader reader = null;
+
+                    reader = new PdfReader(file.filePath);
+                    if (!reader.IsOpenedWithFullPermissions) throw new System.IO.FileLoadException("Cannot merge because \"" + file.fileName + "\" is Locked for editing");
+                });
+            }
+            catch (System.IO.FileLoadException)
+            {
+                throw;
+            }
+
+            try
+            {
                 using (FileStream stream = new FileStream(OutFile, FileMode.Create))
-                using (Document doc = new Document())
+                using (Document doc = new Document(PageSize.A4))
                 using (PdfCopy pdf = new PdfCopy(doc, stream))
                 {
                     doc.Open();
@@ -37,26 +53,24 @@ namespace AllegiantPDFMerger
                     InFiles.ForEach(file =>
                     {
                         reader = new PdfReader(file.filePath);
-                        if (reader.IsOpenedWithFullPermissions) System.Windows.MessageBox.Show("User has usage rights");
-                        else System.Windows.MessageBox.Show("User doesn't has usage rights");
 
-                            for (int i = 0; i < reader.NumberOfPages; i++)
-                            {
-                                page = pdf.GetImportedPage(reader, i + 1);
-                                pdf.AddPage(page);
-                            }
+                        for (int i = 0; i < reader.NumberOfPages; i++)
+                        {
+                            page = pdf.GetImportedPage(reader, i + 1);
+                            doc.SetPageSize(page.Width <= page.Height ? PageSize.A4 : PageSize.A4.Rotate());
+                            pdf.AddPage(page);
+                        }
 
                         pdf.FreeReader(reader);
                         reader.Close();
                     });
                 }
-                ScaleToA4(OutFile, OutFile);
-                return true;
             }
             catch
             {
                 return false;
             }
+                return true;
         }
 
         public static void ScaleToA4(string inPDF, string outPDF)
@@ -85,47 +99,6 @@ namespace AllegiantPDFMerger
             }
             document.Close();
             File.WriteAllBytes(outPDF, ms.GetBuffer());
-        }
-
-        protected virtual bool IsFileLocked(FileInfo file)
-        {
-            FileStream stream = null;
-
-            try
-            {
-                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            }
-            catch (IOException)
-            {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
-                return true;
-            }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
-
-            //file is not locked
-            return false;
-        }
-
-        private bool waitForLockedFile(string fileName)
-        {
-            FileInfo file = new FileInfo(fileName);
-            int x = 0;
-
-            while (IsFileLocked(file) && x < 240)
-            {
-                System.Threading.Thread.Sleep(250);
-                x++;
-            }
-
-            if (IsFileLocked(file)) return true;
-            return false;
         }
     }
 }
