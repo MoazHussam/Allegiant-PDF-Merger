@@ -428,8 +428,8 @@ namespace AllegiantPDFMergerFinal
 
             if (msg == 0x0312)
             {
-                if (this.IsVisible) this.Hide();
-                else this.Show();
+                if (this.WindowState == WindowState.Normal) this.WindowState = WindowState.Minimized;
+                else this.WindowState = WindowState.Normal;
             }
 
             return IntPtr.Zero;
@@ -440,7 +440,7 @@ namespace AllegiantPDFMergerFinal
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();
+            this.WindowState = WindowState.Minimized;
         }
 
         private void btn_ClearAll_Click(object sender, RoutedEventArgs e)
