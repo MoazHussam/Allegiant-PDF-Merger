@@ -251,8 +251,9 @@ namespace AllegiantPDFMergerFinal
                     {
                         if (listedFile.PDFFile == null)
                         {
-                            errorMsg += "File " + listedFile.fileName + " cannot be converted and will be ommited from the merged file\n";
-                            continue;
+                            if (listedFile.errorMsg != "") errorMsg = listedFile.errorMsg;
+                            else errorMsg = "File " + listedFile.fileName + " cannot be converted";
+                            return false;
                         }
                         pdfFiles.Add(listedFile.PDFFile);
                     }
@@ -260,11 +261,15 @@ namespace AllegiantPDFMergerFinal
                 });
 
             if (await convertingTask) messeging.Messege = "Merging";
+            else
+            {
+                messeging.Messege = errorMsg;
+                return false;
+            }
             string resultMessage = "";
 
             Task<bool> mergingTask = convertingTask.ContinueWith((t) =>
                 {
-                    //if (errorMsg != "") MessageBox.Show(errorMsg, "Just screenshot this error report, excution will continue as normal", MessageBoxButton.OK, MessageBoxImage.Warning);
                     if (pdfFiles.Count == 0) return true;
 
                     bool mergeSucceeded = false;

@@ -37,6 +37,10 @@ namespace AllegiantPDFMerger
             {
                 throw;
             }
+            catch
+            {
+                return false;
+            }
 
             try
             {
@@ -57,7 +61,7 @@ namespace AllegiantPDFMerger
                         for (int i = 0; i < reader.NumberOfPages; i++)
                         {
                             page = pdf.GetImportedPage(reader, i + 1);
-                            doc.SetPageSize(page.Width <= page.Height ? PageSize.A4 : PageSize.A4.Rotate());
+                            //doc.SetPageSize(page.Width <= page.Height ? PageSize.A4 : PageSize.A4.Rotate());
                             pdf.AddPage(page);
                         }
 
@@ -70,7 +74,10 @@ namespace AllegiantPDFMerger
             {
                 return false;
             }
-                return true;
+
+
+            ScaleToA4(OutFile, OutFile);
+            return true;
         }
 
         public static void ScaleToA4(string inPDF, string outPDF)

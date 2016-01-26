@@ -162,17 +162,19 @@ namespace AllegiantPDFMerger
             return false;
         }
 
-        private void waitForLockedFile()
+        /// <summary>
+        /// wait until file is unlocked
+        /// </summary>
+        /// <param name="interval">in seconds</param>
+        public void waitForLockedFile(int interval)  //in seconds
         {
-            int x = 0;
-
-            while (IsFileLocked() && x < 60)
+            interval *= 1000; //convert to milliseconds
+            while (IsFileLocked() && interval > 0)
             {
-                System.Threading.Thread.Sleep(250);
-                x++;
+                System.Threading.Thread.Sleep(500);
+                interval-= 500;
             }
 
-            if (IsFileLocked()) return;
             return;
         }
     }

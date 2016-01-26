@@ -12,6 +12,8 @@ namespace AllegiantPDFMerger
 {
     class DOCFiles : Files
     {
+        string convertionErrorMsg = "";
+
         public DOCFiles(string filePath) : base(filePath)
         {
 
@@ -35,7 +37,7 @@ namespace AllegiantPDFMerger
 
                 string filePath = this.filePath;
                 FileInfo file = new FileInfo(filePath);
-                if (this.IsFileLocked()) return null; 
+                if (this.IsFileLocked()) throw new Exception("File: \"" + this.fileName + "\" is open in another application and cannot be merged"); 
 
                 //read doc
                 Word.Application wordApp = null;
@@ -58,8 +60,13 @@ namespace AllegiantPDFMerger
 
                 }
                 catch (Exception ex)
-                {                    
+                {
+                    this.convertionErrorMsg = ex.Message;
                     throw ex;
+                }
+                catch
+                {                    
+                    throw;
                 }
                 finally
                 {

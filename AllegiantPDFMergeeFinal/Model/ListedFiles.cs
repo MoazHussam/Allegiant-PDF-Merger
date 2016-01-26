@@ -18,6 +18,27 @@ namespace AllegiantPDFMergerFinal
     {
         private bool deleteNewFile = false;
         private bool deleteAfterFinish = false;
+        private bool conversionFailed = false;
+        //private Task waitingTask
+        //{
+        //    set
+        //    {
+        //        if (_waitingTask != null) _waitingTask.Dispose();
+        //        _waitingTask = value;
+        //    }
+        //    get
+        //    {
+        //        return _waitingTask;
+        //    }
+        //}
+        public string errorMsg
+        {
+            get
+            {
+                if (task.IsFaulted) return task.Exception.InnerException.Message;
+                else return "";
+            }
+        }
 
         public Task<PDFFiles> task
         {
@@ -32,12 +53,22 @@ namespace AllegiantPDFMergerFinal
             {
                 try
                 {
-                    if (this.fileType == FileType.Word || this.fileType == FileType.Html || this.fileType == FileType.Text) return _PDFFile = getPDFFile().Result;
+                    if (conversionFailed && this.fileType == FileType.Word)
+                    {
+                        this.convert();
+                        return _PDFFile = getPDFFile().Result;
+                    }
+                    else if (this.fileType == FileType.Word || this.fileType == FileType.Html || this.fileType == FileType.Text) return _PDFFile = getPDFFile().Result;
                     else if (this.fileType == FileType.PDF) return _PDFFile;
-                    else return null;
+                    else
+                    {
+                        conversionFailed = true;
+                        return null;
+                    }
                 }
                 catch
                 {
+                    conversionFailed = true;
                     return null;
                 }
             }
@@ -92,8 +123,19 @@ namespace AllegiantPDFMergerFinal
             this.convert();
         }
 
-        private void convert()
+        //public async void waitForLockedDocFile()
+        //{
+        //    _waitingTask = Task.Run(() =>
+        //    {
+        //        this.waitForLockedFile(300);
+
+        //        return true;
+        //    });
+        //}
+
+        public void convert()
         {
+            conversionFailed = false;
             if (this.fileType == FileType.PDF) PDFFile = new PDFFiles(this.filePath);
             else if (this.fileType == FileType.Word || this.fileType == FileType.Html)
             {
@@ -110,6 +152,7 @@ namespace AllegiantPDFMergerFinal
                     tempFile = Path.Combine(Path.GetTempPath(), "FFFFFFFFF");
                 }
                 //if (tempFile == "" || tempFile == null || !File.Exists(tempFile)) System.Windows.Forms.MessageBox.Show("Method name convert \nvar tempFile :" + tempFile, "Just screenshot this error report, excution will continue as normal", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
                 task = _docFile.convertToPDF(tempFile);
             }
             else if (this.fileType == FileType.Text)
