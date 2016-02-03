@@ -1,16 +1,17 @@
 ﻿<Controls:MetroWindow
-    x:Class="AllegiantPDFMergerFinal.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:jas="clr-namespace:WPF.JoshSmith.ServiceProviders.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="mainWindow" mc:Ignorable="d"
+    x:Class="AllegiantPDFMergerFinal.MainWindow"
     Title="Allegiant Merger" Height="700" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" ShowIconOnTitleBar="True" Icon="Resources\Allegiant Icon.ico" Topmost="False" Loaded="MetroWindow_Loaded" GlowBrush="#FF3373F2" Closing="MetroWindow_Closing">
-    <Controls:MetroWindow.Resources>      
+    <Controls:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Icons.xaml"/>                                                      
+                <ResourceDictionary Source="/Resources/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="ItemContStyle" TargetType="ListViewItem">
+            <Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
                 <Style.Resources>
                     <LinearGradientBrush x:Key="MouseOverBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
                         <GradientStop Color="#22000000" Offset="0" />
@@ -37,19 +38,19 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="tabItemStyle" TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Style x:Key="tabItemStyle" TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                 <Setter Property="AllowDrop" Value="True" />
-                <EventSetter Event="DragEnter" Handler="TabItem_DragEnter" />
+                <EventSetter Event="UIElement.DragEnter" Handler="TabItem_DragEnter" />
             </Style>
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <Button Name="btn_Settings" Content="Settings" Click="btn_Settings_Click"/>
+            <Button x:Name="btn_Settings" Content="Settings" Click="btn_Settings_Click"/>
             <!--<Button Name="btn_Quit" Content="Quit" IsEnabled="True" Click="btn_Quit_Click" />-->
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
-    <DockPanel>
+    <DockPanel x:Name="dockPanel">
         <StatusBar Height="23" DockPanel.Dock="Bottom" Background="#FF3373F2">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -69,21 +70,21 @@
                 <TextBlock x:Name="textBlockTip" Foreground="White" />
             </StatusBarItem>
         </StatusBar>
-        <Grid>
+        <Grid x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="29" />
                 <ColumnDefinition Width="140" />
             </Grid.ColumnDefinitions>
-            <TabControl Name="tabcontrol"  ItemContainerStyle="{StaticResource tabItemStyle}">
+            <TabControl x:Name="tabcontrol"  ItemContainerStyle="{StaticResource tabItemStyle}">
                 <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Name="text" Text="{Binding fileNumber, StringFormat=Bundle {0}}" FontSize="18" />
+                        <TextBlock x:Name="text" Text="{Binding fileNumber, StringFormat=Bundle \{0\}}" FontSize="18" />
                     </DataTemplate>
                 </TabControl.ItemTemplate>
                 <TabControl.ContentTemplate>
                     <DataTemplate>
-                        <ListView Name="listview" AllowDrop="True" ItemContainerStyle="{StaticResource ItemContStyle}" ItemsSource="{Binding Path=listedFiles}" Loaded="listview_Loaded" Drop="listview_Drop">
+                        <ListView x:Name="listview" AllowDrop="True" ItemContainerStyle="{StaticResource ItemContStyle}" ItemsSource="{Binding listedFiles}" Loaded="listview_Loaded" Drop="listview_Drop">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -96,46 +97,49 @@
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </TabControl>
-            <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Background="WhiteSmoke" >
-                <TextBlock Text="Actions" FontSize="18" Margin="25,10,0,10" />                
-                <Button Name="btn_ClearAll" Content="Clear All" Margin="25,10,25,10" Click="btn_ClearAll_Click"/>
-                <Button Name="btn_Merge" Content="Merge" Margin="25,10,25,10" Click="btn_Merge_Click"/>
-                <Button Name="btn_MergeAll" Content="Merge All" Margin="25,10,25,10" Click="btn_MergeAll_Click" IsEnabled="True" />
-                <Button Name="btn_Remove" Content="Remove" Margin="25,10,25,10" Click="btn_Remove_Click" IsEnabled="True"/>
-                <Button Name="btn_NewFile" Content="New Bundle" Margin="25,10,25,10" Click="btn_NewFile_Click"/>
-                <Button Name="btn_OpenFile" Content="Open File" Margin="25,10,25,10" Click="btn_OpenFile_Click" />
-                <Button Name="btn_Preview" Content="Preview" Margin="25,10,25,10" Click="btn_Preview_Click" />
-                <Controls:ToggleSwitch IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Header="Always on Top" OnLabel="ON" OffLabel="OFF" Margin="25,20,25,10"/>
+            <StackPanel x:Name="mainStackPanel" Grid.Column="1" Grid.ColumnSpan="2" Background="WhiteSmoke" >
+                <TextBlock Text="Actions" FontSize="18" Margin="25,10,0,10" />
+                <Button x:Name="btn_ClearAll" Content="Clear All" Margin="25,10,25,10" Click="btn_ClearAll_Click"/>
+                <Button x:Name="btn_Merge" Content="Merge" Margin="25,10,25,10" Click="btn_Merge_Click"/>
+                <Button x:Name="btn_MergeAll" Content="Merge All" Margin="25,10,25,10" Click="btn_MergeAll_Click" IsEnabled="True" />
+                <Button x:Name="btn_Remove" Content="Remove" Margin="25,10,25,10" Click="btn_Remove_Click" IsEnabled="True"/>
+                <Button x:Name="btn_NewFile" Content="New Bundle" Margin="25,10,25,10" Click="btn_NewFile_Click"/>
+                <Button x:Name="btn_OpenFile" Content="Open File" Margin="25,10,25,10" Click="btn_OpenFile_Click" />
+                <Button x:Name="btn_Preview" Content="Preview" Margin="25,10,25,10" Click="btn_Preview_Click" />
+                <Controls:ToggleSwitch IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Header="Always on Top" OnLabel="ON" OffLabel="OFF" Margin="25,20,25,10"/>
                 <Button Width="45" 
-                        Height="45"
-                        Margin="25,10,25,10"
-                        Name="btn_ArrowUP"
-                        Click="btn_ArrowUP_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}">
+					Height="45"
+					Margin="25,10,25,10"
+					x:Name="btn_ArrowUP"
+					Click="btn_ArrowUP_Click"
+					Style="{DynamicResource MetroCircleButtonStyle}">
                     <Rectangle Width="20"
-                            Height="20">
+						Height="20">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill"
-                                Visual="{StaticResource appbar_arrow_up}" />
+								Visual="{StaticResource appbar_arrow_up}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
                 <Button Width="45" 
-                        Height="45"
-                        Margin="25,0,25,10"
-                        Name="btn_ArrowDown"
-                        Click="btn_ArrowDown_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}">
+					Height="45"
+					Margin="25,0,25,10"
+					x:Name="btn_ArrowDown"
+					Click="btn_ArrowDown_Click"
+					Style="{DynamicResource MetroCircleButtonStyle}">
                     <Rectangle Width="20"
-                            Height="20">
+						Height="20">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill"
-                                Visual="{StaticResource appbar_arrow_down}" />
+								Visual="{StaticResource appbar_arrow_down}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
                 <Image Source="Resources\Allegiant Logo.jpg" Margin="0,167" />
             </StackPanel>
+            <Popup x:Name="previewPopup" Grid.ColumnSpan="3" PlacementTarget="{Binding ElementName=mainStackPanel}" Placement="Left" Opened="popupOpened" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <WebBrowser x:Name="webBrowser" VerticalAlignment="Center" UseLayoutRounding="True" Width="803" Height="800" Focusable="True" Loaded="pdfPreviewLoaded"/>
+            </Popup>
         </Grid>
     </DockPanel>
 

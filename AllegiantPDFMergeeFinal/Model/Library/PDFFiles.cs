@@ -20,6 +20,11 @@ namespace AllegiantPDFMerger
 
         }
 
+        public static Rectangle pdfPageSize()
+        {
+            return PageSize.A4;
+        }
+
         public static bool Merge(List<PDFFiles> InFiles, string OutFile)
         {
             try

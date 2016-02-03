@@ -478,8 +478,23 @@ namespace AllegiantPDFMergerFinal
             string tempFileName = Path.ChangeExtension(Path.GetTempFileName(), "pdf");
             Task<bool> mergeComplete = merge(tabcontrol.SelectedItem as Tabs, tempFileName, false);
 
-            if(await mergeComplete)
-                System.Diagnostics.Process.Start(tempFileName);
+            if (previewPopup.IsOpen)
+            {
+                previewPopup.IsOpen = false;
+                btn_Preview.Content = "Preview";
+                return;
+            }
+
+
+            if (await mergeComplete)
+            {
+                this.webBrowser.Navigate(@"" + tempFileName);
+                this.previewPopup.IsOpen = true;
+
+                //System.Diagnostics.Process.Start(tempFileName);
+            }
+
+                
         }
 
         private void btn_ArrowUP_Click(object sender, RoutedEventArgs e)
@@ -503,6 +518,18 @@ namespace AllegiantPDFMergerFinal
                 if (index < 0 || index >= listedFiles.Count - 1) return;
                 (lbx.ItemsSource as ObservableCollection<ListedFiles>).Move(index, index + 1);
             }
+        }
+
+        private void pdfPreviewLoaded(object sender, RoutedEventArgs e)
+        {
+            webBrowser.Height = tabcontrol.ActualHeight;//x.Height > 700 ? 650 : x.Height;  //make sure windows is not bigger than a 1366x768 screen
+            webBrowser.Width = tabcontrol.ActualWidth;//x.Width + 20;
+                
+        }
+
+        private void popupOpened(object sender, EventArgs e)
+        {
+            btn_Preview.Content = "Close Preview";
         }
     }
 }

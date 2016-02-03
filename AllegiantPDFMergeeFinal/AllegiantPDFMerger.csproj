@@ -132,6 +132,9 @@
     <Compile Include="Model\Library\Files.cs" />
     <Compile Include="Model\Library\PDFFiles.cs" />
     <Compile Include="Model\Tabs.cs" />
+    <Compile Include="PdfPreviewWindow.xaml.cs">
+      <DependentUpon>PdfPreviewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserMesseging.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +150,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PdfPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
