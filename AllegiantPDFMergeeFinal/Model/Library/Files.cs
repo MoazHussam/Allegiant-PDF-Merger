@@ -92,11 +92,13 @@ namespace AllegiantPDFMerger
             }
         }
 
-        public void copy(string destinationDirectory)
+        public Files copy(string destinationDirectory)
         {
             try
             {
-                _file.CopyTo(Path.Combine(destinationDirectory, _file.Name));
+                string newFileName = Path.Combine(destinationDirectory, _file.Name);
+                _file.CopyTo(newFileName);
+                return new Files(newFileName);
             }
             catch (Exception ex)
             {

@@ -21,7 +21,8 @@ namespace AllegiantPDFMerger
 
         public async Task<PDFFiles> convertToPDF()
         {
-            return await convertDocToPDF(Path.ChangeExtension(this.filePath, ".pdf"), false);
+            if (this.fileType == FileType.PDF) return await convertDocToPDF(this.filePath + " (1)", true);
+            else return await convertDocToPDF(Path.ChangeExtension(this.filePath, ".pdf"), false);
         }
 
         public async Task<PDFFiles> convertToPDF(string outFile)
@@ -53,6 +54,8 @@ namespace AllegiantPDFMerger
                         Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                         Type.Missing, Type.Missing, Type.Missing, false, Type.Missing,
                         Type.Missing, Type.Missing, Type.Missing);
+
+                    doc.Protect(WdProtectionType.wdNoProtection);
 
                     doc.SaveAs(destinationFile, WdSaveFormat.wdFormatPDF);
 
