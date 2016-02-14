@@ -27,7 +27,7 @@
     <ProductName>Allegiant Merger</ProductName>
     <PublisherName>Moaz Ahmed</PublisherName>
     <SuiteName>Allegiant Finance</SuiteName>
-    <ApplicationRevision>25</ApplicationRevision>
+    <ApplicationRevision>26</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

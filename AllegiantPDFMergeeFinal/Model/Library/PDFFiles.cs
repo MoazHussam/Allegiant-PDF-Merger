@@ -27,38 +27,25 @@ namespace AllegiantPDFMerger
 
         public static bool Merge(List<PDFFiles> InFiles, string OutFile)
         {
-            //try
-            //{
+            try
+            {
 
-            //    for (int i = 0; i < InFiles.Count; i++)
-            //    {
-            //        PdfReader reader = null;
+                InFiles.ForEach(file =>
+                {
+                    PdfReader reader = null;
 
-            //        var file = InFiles[i];
-
-            //        reader = new PdfReader(file.filePath);
-            //        if (!reader.IsOpenedWithFullPermissions)
-            //        {
-            //            reader.Close();
-            //            var tempFile = file.copy(Path.GetTempPath());
-            //            tempFile.rename(Path.ChangeExtension(Path.GetRandomFileName(), "pdf"));
-
-            //            var tempPdfFile = new DOCFiles(tempFile.filePath);
-
-            //            var docFile = tempPdfFile.convertToPDF().Result;
-            //            InFiles[i] = docFile;
-            //            //throw new System.IO.FileLoadException("Cannot merge because \"" + file.fileName + "\" is Locked for editing");
-            //        }
-            //    }
-            //}
-            //catch (System.IO.FileLoadException)
-            //{
-            //    throw;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+                    reader = new PdfReader(file.filePath);
+                    if (!reader.IsOpenedWithFullPermissions) throw new System.IO.FileLoadException("Cannot merge because \"" + file.fileName + "\" is Locked for editing");
+                });
+            }
+            catch (System.IO.FileLoadException)
+            {
+                throw;
+            }
+            catch
+            {
+                return false;
+            }
 
             try
             {
@@ -74,21 +61,7 @@ namespace AllegiantPDFMerger
                     //fixed typo
                     InFiles.ForEach(file =>
                     {
-                        reader = new PdfReader(file.filePath);
-
-                        if (!reader.IsOpenedWithFullPermissions)
-                        {
-                            reader.Close();
-                            var tempFile = file.copy(Path.GetTempPath());
-                            tempFile.rename(Path.ChangeExtension(Path.GetRandomFileName(), "pdf"));
-
-                            var tempPdfFile = new DOCFiles(tempFile.filePath);
-
-                            var docFile = tempPdfFile.convertToPDF().Result;
-                            file = docFile;
-
-                            reader = new PdfReader(file.filePath);
-                        }
+                        reader = new PdfReader(file.filePath);                        
 
                         for (int i = 0; i < reader.NumberOfPages; i++)
                         {
