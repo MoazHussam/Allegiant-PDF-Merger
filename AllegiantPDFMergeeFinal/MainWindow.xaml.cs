@@ -1,30 +1,24 @@
-﻿using System;
+﻿//THis application is using AGPL License
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using MahApps.Metro.Controls;
 using WPF.JoshSmith.ServiceProviders.UI;
 using System.Collections.ObjectModel;
 using AllegiantPDFMerger;
 using System.IO;
-using System.Diagnostics;
 using Outlook = NetOffice.OutlookApi;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using MahApps.Metro;
-//using System.Runtime.InteropServices;
 
 namespace AllegiantPDFMergerFinal
-{
+{  
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -56,14 +50,18 @@ namespace AllegiantPDFMergerFinal
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             string destFolder = getDestinationFolder();
+            string ghostscriptPath = getGhostscriptPath();
             messeging = new UserMesseging(textBlockMessege, textBlockTip);
             if (destFolder == "") messeging.Messege = "Please Choose Destination Folder";
+            else if (ghostscriptPath == "") messeging.Messege = "Cannot Find Ghostscript Path";
             else
             {
                 messeging.Messege = "Ready";
                 messeging.Tip = "Current Destination Folder: " + Path.GetFileName(destFolder);
             }
             addHotKey();
+
+
         }
 
         private void listview_Loaded(object sender, RoutedEventArgs e)
@@ -232,8 +230,39 @@ namespace AllegiantPDFMergerFinal
             merge(tabcontrol.SelectedItem as Tabs, getFileName(), true);
         }
 
+        private void setupGhostscript()
+        {
+            string ghostscriptPath = getGhostscriptPath();
+            if (ghostscriptPath == "")
+            {
+                string executableName = Environment.Is64BitOperatingSystem ? "gswin64c.exe" : "gswin32c.exe";
+                System.Windows.Forms.OpenFileDialog browser = new System.Windows.Forms.OpenFileDialog();
+                browser.Title = "Find " + executableName;
+                browser.Filter = ".exe|*.exe";
+                browser.FileName = executableName;
+                browser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
+                System.Windows.Forms.DialogResult result = browser.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    if (browser.SafeFileName == executableName)
+                    {
+                        setGhostscriptPath(browser.FileName);
+                        messeging.Messege = "Ghostscript Location Set";
+                    }
+                    else
+                    {
+                        messeging.Messege = "Invalid Ghostscript location";
+                    }
+                }
+            }
+        }
+
         private async Task<bool> merge(Tabs selectedTab, string outFile, bool clearList)
         {
+            setupGhostscript();
+
             if (selectedTab == null || outFile == "") return false;
 
             ObservableCollection<ListedFiles> listedFiles = selectedTab.listedFiles;
@@ -283,6 +312,10 @@ namespace AllegiantPDFMergerFinal
                     {
                         resultMessage = ex.Message;
                     }
+                    catch (FileNotFoundException ex)
+                    {
+                        resultMessage = ex.Message;
+                    }
 
                     return mergeSucceeded;
                 });
@@ -324,8 +357,6 @@ namespace AllegiantPDFMergerFinal
             }
             return child;
         }
-
-
 
         private List<string> getFileName(int numberOfFiles)
         {
@@ -385,6 +416,23 @@ namespace AllegiantPDFMergerFinal
             }
         }
 
+        private string getGhostscriptPath()
+        {
+            return Properties.Settings.Default.GhostscriptPath;
+        }
+
+        private void setGhostscriptPath(string ghostscriptPath)
+        {
+
+            if(File.Exists(ghostscriptPath))
+            {
+                Properties.Settings.Default.GhostscriptPath = ghostscriptPath;
+                Properties.Settings.Default.Save();
+            }
+
+            
+        }
+
         private string getDestinationFolder()
         {
             return Properties.Settings.Default.DestinationFolder;
@@ -399,7 +447,7 @@ namespace AllegiantPDFMergerFinal
             }
             Properties.Settings.Default.DestinationFolder = destFolder;
             Properties.Settings.Default.Save();
-            messeging.Messege = "Ready";
+            messeging.Messege = "Ready";                       
         }
 
         #region // Adding Hotkeys

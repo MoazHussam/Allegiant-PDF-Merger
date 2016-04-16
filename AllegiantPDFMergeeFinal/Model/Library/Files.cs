@@ -62,7 +62,7 @@ namespace AllegiantPDFMerger
                 {
                     _file = new FileInfo(value);
                 }
-                else throw new FileNotFoundException();
+                else throw new FileNotFoundException("File " + value + " Does not exist");
             }
         }
 

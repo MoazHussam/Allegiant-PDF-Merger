@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using iTextSharp.text.pdf;
 using System.IO;
 using iTextSharp.text;
+using System.Diagnostics;
 
 namespace AllegiantPDFMerger
 {
@@ -30,13 +31,22 @@ namespace AllegiantPDFMerger
             try
             {
 
-                InFiles.ForEach(file =>
+                for(int i=0; i<InFiles.Count; i++)
                 {
                     PdfReader reader = null;
 
-                    reader = new PdfReader(file.filePath);
-                    if (!reader.IsOpenedWithFullPermissions) throw new System.IO.FileLoadException("Cannot merge because \"" + file.fileName + "\" is Locked for editing");
-                });
+                    reader = new PdfReader(InFiles[i].filePath);
+                    if (!reader.IsOpenedWithFullPermissions)
+                    {
+                        string newUnlockedFile = unlockPDF(InFiles[i].filePath); //throw new System.IO.FileLoadException("Cannot merge because \"" + file.fileName + "\" is Locked for editing");
+                        InFiles.Remove(InFiles[i]);
+                        InFiles.Insert(i, new PDFFiles(newUnlockedFile));
+                    }
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw ex;
             }
             catch (System.IO.FileLoadException)
             {
@@ -112,5 +122,24 @@ namespace AllegiantPDFMerger
             document.Close();
             File.WriteAllBytes(outPDF, ms.GetBuffer());
         }
+
+        private static string unlockPDF(string inFile)
+        {
+            string outFile = Path.GetTempFileName();
+
+            string ghostscriptConsolePath = "";
+
+            Files ghostScriptFile = new Files(ghostscriptConsolePath);
+            Process p = new Process();
+            p.StartInfo.FileName = ghostscriptConsolePath;
+            p.StartInfo.Arguments = "-q -sDEVICE=pdfwrite -dBATCH -dNOPAUSE  -sOutputFile=" + "\"" + outFile + "\"" + " " + "\"" + inFile + "\"";
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.Start();
+            p.WaitForExit();
+
+            return outFile;
+        }
     }
+
 }
