@@ -4,7 +4,7 @@
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:jas="clr-namespace:WPF.JoshSmith.ServiceProviders.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="mainWindow" mc:Ignorable="d"
-    x:Class="AllegiantPDFMergerFinal.MainWindow"
+    x:Class="AllegiantPDFMerger.MainWindow"
     Title="Allegiant Merger" Height="700" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" ShowIconOnTitleBar="True" Icon="Resources\Allegiant Icon.ico" Topmost="False" Loaded="MetroWindow_Loaded" GlowBrush="#FF3373F2" Closing="MetroWindow_Closing">
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>

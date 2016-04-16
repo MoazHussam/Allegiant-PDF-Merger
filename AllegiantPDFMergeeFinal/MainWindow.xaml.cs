@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using MahApps.Metro;
 
-namespace AllegiantPDFMergerFinal
+namespace AllegiantPDFMerger
 {  
     /// <summary>
     /// Interaction logic for MainWindow.xaml

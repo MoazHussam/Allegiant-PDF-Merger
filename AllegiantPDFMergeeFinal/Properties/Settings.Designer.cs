@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AllegiantPDFMergerFinal.Properties {
+namespace AllegiantPDFMerger.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -26,24 +26,24 @@ namespace AllegiantPDFMergerFinal.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DestinationFolder {
-            get {
-                return ((string)(this["DestinationFolder"]));
-            }
-            set {
-                this["DestinationFolder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string GhostscriptPath {
             get {
                 return ((string)(this["GhostscriptPath"]));
             }
             set {
                 this["GhostscriptPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string DestinationFolder {
+            get {
+                return ((string)(this["DestinationFolder"]));
+            }
+            set {
+                this["DestinationFolder"] = value;
             }
         }
     }

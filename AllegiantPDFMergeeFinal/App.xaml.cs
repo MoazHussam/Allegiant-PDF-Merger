@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AllegiantPDFMergerFinal
+namespace AllegiantPDFMerger
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -43,7 +43,7 @@ namespace AllegiantPDFMergerFinal
             //    key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
             //}
 
-            //AllegiantPDFMergerFinal.MainWindow window = new MainWindow();
+            //AllegiantPDFMerger.MainWindow window = new MainWindow();
             //window.Show();
 
             base.OnStartup(e);

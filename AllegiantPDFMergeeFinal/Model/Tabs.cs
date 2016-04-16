@@ -9,7 +9,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 
-namespace AllegiantPDFMergerFinal
+namespace AllegiantPDFMerger
 {
     class Tabs
     {

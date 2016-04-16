@@ -127,7 +127,7 @@ namespace AllegiantPDFMerger
         {
             string outFile = Path.GetTempFileName();
 
-            string ghostscriptConsolePath = "";
+            string ghostscriptConsolePath = Properties.Settings.Default.GhostscriptPath;
 
             Files ghostScriptFile = new Files(ghostscriptConsolePath);
             Process p = new Process();

@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using System.Windows.Interop;
 using System.Windows;
 
-namespace AllegiantPDFMergerFinal
+namespace AllegiantPDFMerger
 {
     class ListedFiles : Files
     {

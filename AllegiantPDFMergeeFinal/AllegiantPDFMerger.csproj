@@ -7,7 +7,7 @@
     <ProjectGuid>{249BE45C-15B6-4AE8-B2BA-16A9E0C1C87B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AllegiantPDFMergerFinal</RootNamespace>
+    <RootNamespace>AllegiantPDFMerger</RootNamespace>
     <AssemblyName>Allegiant PDF Merger</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -27,8 +27,8 @@
     <ProductName>Allegiant Merger</ProductName>
     <PublisherName>Moaz Ahmed</PublisherName>
     <SuiteName>Allegiant Finance</SuiteName>
-    <ApplicationRevision>27</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationVersion>1.4.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
